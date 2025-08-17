@@ -1,0 +1,27 @@
+[project]
+name = "src"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Damian",email = "damiankowalczyk3688@gmail.com"}
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+apscheduler = "*"
+openpyxl = "*"
+pandas = "*"
+sqlalchemy = "^2.0.42"
+httpx = "^0.28.1"
+python-dotenv = "^1.1.1"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+types-openpyxl = "*"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
