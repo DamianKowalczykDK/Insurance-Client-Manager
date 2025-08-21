@@ -1,12 +1,9 @@
-from unittest.mock import patch
-
-import pytest
 from openpyxl.styles import Font, PatternFill, Alignment, Border
-
-from src.excel.manager.base_manager import ExcelManager
-from pathlib import Path
-
 from src.excel.type.style_type import CellStyle, apply_style
+from src.excel.manager.base_manager import ExcelManager
+from unittest.mock import patch
+from pathlib import Path
+import pytest
 
 
 def fill_style() -> CellStyle:
@@ -168,6 +165,11 @@ def test_style_border_side(example_base_manager: ExcelManager) -> None:
     border: Border = cell.border
 
     assert border.top is not None
+    assert border.bottom is not None
+    assert border.left is not None
+    assert border.left.color is not None
+    assert border.right is not None
+
     assert border.bottom.style == "thick"
     assert border.left.color.rgb == "00FF0000"
     assert border.right.style == "thin"

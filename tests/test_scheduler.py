@@ -1,14 +1,8 @@
-from pathlib import Path
-from unittest.mock import patch, MagicMock
-from apscheduler.events import JobExecutionEvent, EVENT_JOB_EXECUTED, EVENT_JOB_ERROR  # type: ignore
-from apscheduler.schedulers.background import BackgroundScheduler
-
-from config import client_service, create_client_service
-from src.excel.manager.client_manager import ClientExcelManager
 from src.scheduler.clients_scheduler import job_notify_and_cleanup, create_scheduler, default_listener
+from apscheduler.events import JobExecutionEvent, EVENT_JOB_EXECUTED, EVENT_JOB_ERROR  # type: ignore
+from apscheduler.schedulers.background import BackgroundScheduler  # type: ignore
+from unittest.mock import patch, MagicMock
 import time
-
-from src.service.client_service import ClientService
 
 
 def test_scheduler_adds_jobs_correctly() -> None:

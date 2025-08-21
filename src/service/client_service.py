@@ -1,4 +1,7 @@
+from collections import defaultdict
+
 from src.excel.manager.client_manager import ClientExcelManager
+from src.model.report import MonthlyReportDict
 from src.service.invoice_service import InvoiceService
 from src.service.email_service import EmailService
 from datetime import datetime, timedelta
@@ -101,35 +104,35 @@ class ClientService:
         return removed_clients
 
 
-    # def generate_monthly_report(self) -> MonthlyReportDict:
-    #     students = self.client_excel_manager.load_client_row()
-    #     current_month = datetime.today().strftime("%Y-%m")
-    #     ratio = self.client_excel_manager.ratio
-    #
-    #     course_count: dict[str, int] = defaultdict(int)
-    #     gross_total = 0
-    #
-    #     for student in students:
-    #         try:
-    #             payment_date_str = student["next_payment"].split()[0]
-    #             payment_date = datetime.strptime(payment_date_str, "%Y-%m-%d").date()
-    #         except Exception:
-    #             continue
-    #
-    #         if payment_date.strftime("%Y-%m") == current_month:
-    #             course = student["course"]
-    #             price = student["price"]
-    #             course_count[course] += 1
-    #             gross_total += price
-    #
-    #     net_total = round(gross_total * ratio)
-    #
-    #     return {
-    #         "month": current_month,
-    #         "courses": course_count,
-    #         "gross_total": gross_total,
-    #         "net_total": net_total
-    #     }
+    def generate_monthly_report(self) -> MonthlyReportDict:
+        clients = self.client_excel_manager.load_client_row()
+        current_month = datetime.today().strftime("%Y-%m")
+        ratio = self.client_excel_manager.ratio
+
+        company_count: dict[str, int] = defaultdict(int)
+        gross_total = 0
+
+        for client in clients:
+            try:
+                payment_date_str = client["next_payment"].split()[0]
+                payment_date = datetime.strptime(payment_date_str, "%Y-%m-%d").date()
+            except Exception:
+                continue
+
+            if payment_date.strftime("%Y-%m") == current_month:
+                course = client["insurance_company"]
+                price = client["price"]
+                company_count[course] += 1
+                gross_total += price
+
+        net_total = round(gross_total * ratio)
+
+        return {
+            "month": current_month,
+            "company": company_count,
+            "gross_total": gross_total,
+            "net_total": net_total
+        }
 
 
 

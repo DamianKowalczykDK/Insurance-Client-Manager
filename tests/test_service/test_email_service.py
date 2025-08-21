@@ -1,12 +1,8 @@
 from unittest.mock import MagicMock, patch
-
-from mypy.checker import Mapping
-
 from config import email_service
 
 
 def test_send_email() ->  None:
-
     with patch("smtplib.SMTP") as mock_smtp:
         instance = mock_smtp.return_value.__enter__.return_value
         instance.sendmail = MagicMock()

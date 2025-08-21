@@ -1,5 +1,3 @@
-from sqlalchemy.testing.plugin.plugin_base import logging
-
 from src.model.invoice import InvoiceDict
 import httpx
 import json

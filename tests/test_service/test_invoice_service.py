@@ -1,16 +1,17 @@
-from datetime import date
 from unittest.mock import patch, MagicMock
-
+from src.model.invoice import InvoiceDict
 from config import invoice_service
-from src.service.invoice_service import InvoiceService
-from tests.conftest import invoice_dict
+
 
 
 def test_create_invoice() -> None:
-    data = {
-        "client_name": "client_name",
-        "item_name": "item_name",
-        "item_price": 100
+    data: InvoiceDict = {
+        "client_name": "test_name",
+        "client_email": "test_email",
+        "client_tax_no": "test_tax_no",
+        "item_price": 100,
+        "item_name": "test_item_name",
+        "item_quantity": 1
     }
 
     with patch("httpx.Client") as mock_client:

@@ -37,18 +37,18 @@ def main() -> None:
     )
 
 
-    client_service.add_client(client1)
+    # client_service.add_client(client1)
     # client_service.add_client(client2)
     # client_service.add_client(client3)
 
-    client_service.confirm_payment("alonamelnyk@example.pl")
+    # client_service.confirm_payment("alonamelnyk@example.pl")
 
     # client_service.notify_payment_due_in_days()
 
 
     # invoice_service.get_invoice()
     # invoice_service.update_invoice(406516632)
-
+    # print(client_service.generate_monthly_report())
 
 if __name__ == '__main__':
     main()

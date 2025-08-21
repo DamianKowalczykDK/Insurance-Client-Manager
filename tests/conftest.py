@@ -1,10 +1,22 @@
-from datetime import date, datetime
-
+from src.service.client_service import ClientService
+from src.model.client import Client, ClientDict
+from src.model.report import MonthlyReportDict
+from src.model.invoice import InvoiceDict
+from unittest.mock import MagicMock
 import pytest
 
-from src.model.client import Client, ClientDict
-from src.model.invoice import InvoiceDict
-from src.model.report import MonthlyReportDict
+
+@pytest.fixture
+def example_bad_client() -> dict[str, str | int]:
+    return  {
+        "name": "bad_client",
+        "email": "bad@example.com",
+        "insurance_company": "abc",
+        "car_model": "Audi",
+        "car_year": 2020,
+        "price": 1000,
+        "next_payment": "not_a_date"
+    }
 
 
 @pytest.fixture
@@ -75,3 +87,44 @@ def report_dict() -> MonthlyReportDict:
         "gross_total": 500,
         "net_total": 100,
     }
+
+import tempfile
+from datetime import date
+from pathlib import Path
+
+import pytest
+import os
+from typing import Generator
+from src.excel.manager.base_manager import ExcelManager
+from src.excel.manager.client_manager import ClientExcelManager
+from src.model.client import Client, ClientDict
+
+
+@pytest.fixture
+def example_base_manager() -> Generator[ExcelManager, None, None]:
+    tmp_dir = tempfile.gettempdir()
+    file_path = os.path.join(tmp_dir, "test.xlsx")
+    if os.path.exists(file_path):
+        os.remove(file_path)
+    manager = ExcelManager(file_path)
+    sheet_name = "test"
+    manager.workbook.create_sheet(sheet_name)
+
+    yield  manager
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+@pytest.fixture
+def example_client_manager(tmp_path: Path) -> ClientExcelManager:
+    filepath = tmp_path / "clients.xlsx"
+    manager = ClientExcelManager(str(filepath))
+    return manager
+
+
+@pytest.fixture
+def example_client_service(example_client_manager: ClientExcelManager) -> ClientService:
+    mock_email_service = MagicMock()
+    mock_invoice_service = MagicMock()
+    client_service = ClientService(example_client_manager, mock_email_service, mock_invoice_service)
+    return client_service

@@ -1,8 +1,6 @@
-from datetime import date
-import pytest
 from src.model.client import Client, ClientDict
-from src.model.invoice import InvoiceDict
 from src.model.report import MonthlyReportDict
+from src.model.invoice import InvoiceDict
 
 
 def test_model_client(client_1: Client, client1_data: ClientDict) -> None:
