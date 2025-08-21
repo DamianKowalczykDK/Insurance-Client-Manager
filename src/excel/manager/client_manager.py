@@ -178,11 +178,6 @@ class ClientExcelManager(ExcelManager):
     # Method auxiliary
     # -----------------------------------------------------------------------------------------------------
 
-    def _init_main_table(self) -> None:
-        ws = self.workbook.create_sheet(self.sheet_name)
-        ws.append(self.main_table_headers)
-        self.save()
-
     def _highlight_overdue_payment(self) -> None:
         ws = self.get_sheet()
         today = datetime.today().date()

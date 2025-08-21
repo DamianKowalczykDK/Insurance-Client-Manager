@@ -37,7 +37,7 @@ def main() -> None:
     )
 
 
-    # client_service.add_client(client1)
+    client_service.add_client(client1)
     # client_service.add_client(client2)
     # client_service.add_client(client3)
 
