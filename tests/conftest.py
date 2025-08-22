@@ -1,9 +1,16 @@
+from src.excel.manager.client_manager import ClientExcelManager
+from src.excel.manager.base_manager import ExcelManager
 from src.service.client_service import ClientService
 from src.model.client import Client, ClientDict
 from src.model.report import MonthlyReportDict
 from src.model.invoice import InvoiceDict
 from unittest.mock import MagicMock
+from typing import Generator
+from datetime import date
+from pathlib import Path
+import tempfile
 import pytest
+import os
 
 
 @pytest.fixture
@@ -87,17 +94,6 @@ def report_dict() -> MonthlyReportDict:
         "gross_total": 500,
         "net_total": 100,
     }
-
-import tempfile
-from datetime import date
-from pathlib import Path
-
-import pytest
-import os
-from typing import Generator
-from src.excel.manager.base_manager import ExcelManager
-from src.excel.manager.client_manager import ClientExcelManager
-from src.model.client import Client, ClientDict
 
 
 @pytest.fixture

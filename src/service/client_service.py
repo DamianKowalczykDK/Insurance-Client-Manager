@@ -1,30 +1,60 @@
-from collections import defaultdict
-
 from src.excel.manager.client_manager import ClientExcelManager
 from src.model.report import MonthlyReportDict
 from src.service.invoice_service import InvoiceService
 from src.service.email_service import EmailService
 from datetime import datetime, timedelta
 from src.model.client import Client
+from collections import defaultdict
 
 
 class ClientService:
+    """Service layer to manage clients, notifications, and reports.
+
+    This class provides methods to add, update, remove, and check clients,
+    notify them about upcoming payments, remove overdue clients,
+    and generate monthly reports.
+    """
+
     def __init__(
-            self,
-            client_excel_manager: ClientExcelManager,
-            email_service: EmailService,
-            invoice_service: InvoiceService
+        self,
+        client_excel_manager: ClientExcelManager,
+        email_service: EmailService,
+        invoice_service: InvoiceService
     ) -> None:
+        """Initialize the ClientService with dependencies.
+
+        Args:
+            client_excel_manager: Instance of ClientExcelManager for Excel operations.
+            email_service: Instance of EmailService for sending emails.
+            invoice_service: Instance of InvoiceService for invoice generation.
+        """
         self.client_excel_manager = client_excel_manager
         self.email_service = email_service
         self.invoice_service = invoice_service
 
     def add_client(self, client: Client) -> None:
+        """Add a new client to the Excel sheet.
+
+        Args:
+            client: Client instance to add.
+
+        Raises:
+            ValueError: If a client with the same email already exists.
+        """
         if self.check_if_client_exists(client.email):
             raise ValueError(f"Client with email {client.email} already exists")
         self.client_excel_manager.insert_main_row(client.to_dict())
 
     def update_client(self, email: str, update_client: Client) -> None:
+        """Update an existing client's data.
+
+        Args:
+            email: Current email of the client to update.
+            update_client: Client instance with updated data.
+
+        Raises:
+            ValueError: If the new email already exists or client not found.
+        """
         if email != update_client.email and self.check_if_client_exists(update_client.email):
             raise ValueError(f"Client with email {update_client.email} already exists")
 
@@ -32,19 +62,48 @@ class ClientService:
             raise ValueError(f"Client with email {email} not found")
 
     def confirm_payment(self, email: str, days: int = 30) -> None:
+        """Confirm payment by shifting the next payment date.
+
+        Args:
+            email: Email of the client.
+            days: Number of days to shift the payment date.
+
+        Raises:
+            ValueError: If the client is not found.
+        """
         if not self.client_excel_manager.shift_payment_date(2, email, 7, days):
             raise ValueError(f"Client with email {email} not found")
 
     def remove_client(self, email: str) -> None:
+        """Remove a client from the Excel sheet.
+
+        Args:
+            email: Email of the client to remove.
+
+        Raises:
+            ValueError: If the client is not found.
+        """
         if not self.client_excel_manager.remove_client_row(2, email):
             raise ValueError(f"Client with email {email} not found")
 
     def check_if_client_exists(self, email: str) -> bool:
+        """Check if a client exists based on email.
+
+        Args:
+            email: Email to check.
+
+        Returns:
+            True if the client exists, False otherwise.
+        """
         clients = self.client_excel_manager.load_client_row()
         return any(c["email"] == email for c in clients)
 
-
     def notify_payment_due_in_days(self, days_ahead: int = 1) -> None:
+        """Send payment reminder emails to clients whose payment is due.
+
+        Args:
+            days_ahead: Number of days ahead to notify clients.
+        """
         target_days = (datetime.today() + timedelta(days=days_ahead)).date()
         clients = self.client_excel_manager.load_client_row()
 
@@ -82,6 +141,14 @@ class ClientService:
                 print(f"Email with reminder send to {client['email']} date: {payment_date}")
 
     def remove_overdue_clients(self, overdue_days: int = 3) -> list[str]:
+        """Remove clients whose payment is overdue by a given number of days.
+
+        Args:
+            overdue_days: Number of days after which clients are considered overdue.
+
+        Returns:
+            List of emails of removed clients.
+        """
         today = datetime.today().date()
         all_clients = self.client_excel_manager.load_client_row()
 
@@ -103,8 +170,12 @@ class ClientService:
         self.client_excel_manager.overwrite_clients(remaining_clients)
         return removed_clients
 
-
     def generate_monthly_report(self) -> MonthlyReportDict:
+        """Generate a report summarizing client activity for the current month.
+
+        Returns:
+            MonthlyReportDict: Dictionary containing month, company counts, gross and net totals.
+        """
         clients = self.client_excel_manager.load_client_row()
         current_month = datetime.today().strftime("%Y-%m")
         ratio = self.client_excel_manager.ratio
@@ -133,7 +204,3 @@ class ClientService:
             "gross_total": gross_total,
             "net_total": net_total
         }
-
-
-
-

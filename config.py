@@ -9,18 +9,21 @@ import os
 
 load_dotenv()
 
+# -----------------------------------------------------------------------------------------------------
+# Default styles for Excel tables
+# -----------------------------------------------------------------------------------------------------
 
 header_style: CellStyle = {
-        "font": Font(bold=True, color="000000"),
-        "fill": PatternFill(start_color="4CAF50", end_color="4CAF50", fill_type="solid"),
-        "alignment": Alignment(horizontal="left", vertical="center"),
-        "border_sides": {
-            "top": {"style": "medium", "color": "000000"},
-            "bottom": {"style": "medium", "color": "000000"},
-            "left": {"style": "medium", "color": "000000"},
-            "right": {"style": "medium", "color": "000000"},
-        }
+    "font": Font(bold=True, color="000000"),
+    "fill": PatternFill(start_color="4CAF50", end_color="4CAF50", fill_type="solid"),
+    "alignment": Alignment(horizontal="left", vertical="center"),
+    "border_sides": {
+        "top": {"style": "medium", "color": "000000"},
+        "bottom": {"style": "medium", "color": "000000"},
+        "left": {"style": "medium", "color": "000000"},
+        "right": {"style": "medium", "color": "000000"},
     }
+}
 
 row_style: CellStyle = {
     "font": Font(name="Calibri", size=11, color="000000"),
@@ -38,18 +41,20 @@ overdue_style: CellStyle = {
     "fill": PatternFill(start_color="FFCCCC", end_color="FFCCCC", fill_type="solid"),
     "font": Font(color="000000")
 }
+
+# -----------------------------------------------------------------------------------------------------
+# Initialize services with environment variables
+# -----------------------------------------------------------------------------------------------------
+
 client_excel_manager = ClientExcelManager(
     filepath="Clients.xlsx",
     sheet_name="Clients",
     main_table_headers=["NAME", "EMAIL", "INSURANCE_COMPANY", "CAR_MODEL", "CAR_YEAR", "PRICE", "NEXT_PAYMENT"],
-
     header_style=header_style,
     row_style=row_style,
     overdue_style=overdue_style,
-
     main_table_start_col="A",
     company_table_start_col="I",
-
 )
 
 smtp_server = os.getenv("SMTP_SERVER")
@@ -67,9 +72,15 @@ client_service = ClientService(client_excel_manager, email_service, invoice_serv
 
 
 def create_client_service() -> ClientService:
-    # ------------------------------------------------------------------------------------------------------------------
-    # STUDENT EXCEL MANAGER
-    # ------------------------------------------------------------------------------------------------------------------
+    """Factory function to create and return a fully configured ClientService instance.
+
+    This function initializes the ClientExcelManager, EmailService, and InvoiceService
+    with default styles and environment variable credentials, and returns a ClientService.
+
+    Returns:
+        ClientService: Configured client service instance.
+    """
+    # Reuse the default styles
     header_style: CellStyle = {
         "font": Font(bold=True, color="000000"),
         "fill": PatternFill(start_color="4CAF50", end_color="4CAF50", fill_type="solid"),
@@ -98,18 +109,16 @@ def create_client_service() -> ClientService:
         "fill": PatternFill(start_color="FFCCCC", end_color="FFCCCC", fill_type="solid"),
         "font": Font(color="000000")
     }
+
     client_excel_manager = ClientExcelManager(
         filepath="Clients.xlsx",
         sheet_name="Clients",
         main_table_headers=["NAME", "EMAIL", "INSURANCE_COMPANY", "CAR_MODEL", "CAR_YEAR", "PRICE", "NEXT_PAYMENT"],
-
         header_style=header_style,
         row_style=row_style,
         overdue_style=overdue_style,
-
         main_table_start_col="A",
         company_table_start_col="I",
-
     )
 
     smtp_server = os.getenv("SMTP_SERVER")

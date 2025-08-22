@@ -7,8 +7,8 @@ from src.service.invoice_service import InvoiceService
 
 def main() -> None:
     client1 = Client(
-        name='Damian Kowalczyk',
-        email='damian_kowalczyk@interia.eu',
+        name='Piotr Nowak',
+        email='piotrnowak@example.com ',
         insurance_company="PZU",
         car_model="Audi A5",
         car_year=2013,
@@ -17,8 +17,8 @@ def main() -> None:
     )
 
     client2 = Client(
-        name='Alona Melnyk',
-        email='alonamelnyk@example.pl',
+        name='Tadeusz Nowak',
+        email='tadeusznowak@example.pl',
         insurance_company="WARTA",
         car_model="Opel Corsa",
         car_year=2009,
@@ -28,8 +28,8 @@ def main() -> None:
 
     client3 = Client(
         name='Damian Nowak',
-        email='damian_nowak@example.pl',
-        insurance_company="LINK",
+        email='damiannowak@example.pl',
+        insurance_company="LINK4",
         car_model="Seat Leon",
         car_year=2011,
         price=1500,

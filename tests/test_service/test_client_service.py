@@ -3,7 +3,6 @@ from src.service.client_service import ClientService
 from unittest.mock import MagicMock, patch
 from datetime import datetime, timedelta
 from src.model.client import Client
-from pathlib import Path
 import pytest
 
 
@@ -18,19 +17,19 @@ def test_add_client_service_with_email_already_exist(example_client_service: Cli
     with pytest.raises(ValueError, match="Client with email"):
         example_client_service.add_client(client_1)
 
-def test_update_client_service(tmp_path: Path, client_1: Client, client_2: Client) -> None:
-    file_path = tmp_path / "clients.xlsx"
-    manager = ClientExcelManager(str(file_path))
-    mock_email_service = MagicMock()
-    mock_invoice_service = MagicMock()
-    client = ClientService(manager, mock_email_service, mock_invoice_service)
-    client.add_client(client_1)
+def test_update_client_service(
+        example_client_service: ClientService,
+        example_client_manager: ClientExcelManager,
+        client_1: Client,
+        client_2: Client
+) -> None:
+    example_client_service.add_client(client_1)
 
-    client.update_client("client1@example.com", client_2)
-    ws = manager.get_sheet()
+    example_client_service.update_client("client1@example.com", client_2)
+    ws = example_client_manager.get_sheet()
 
     assert ws["A2"].value == "client2"
-    assert client.check_if_client_exists("client2@gmail.com") is True
+    assert example_client_service.check_if_client_exists("client2@gmail.com") is True
 
 def test_update_client_service_with_email_already_exist(
         example_client_service: ClientService,
