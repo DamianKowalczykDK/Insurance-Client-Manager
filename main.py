@@ -8,7 +8,7 @@ from src.service.invoice_service import InvoiceService
 def main() -> None:
     client1 = Client(
         name='Piotr Nowak',
-        email='piotrnowak@example.com ',
+        email='piotrnowak@example.com',
         insurance_company="PZU",
         car_model="Audi A5",
         car_year=2013,
@@ -41,7 +41,7 @@ def main() -> None:
     # client_service.add_client(client2)
     # client_service.add_client(client3)
 
-    # client_service.confirm_payment("alonamelnyk@example.pl")
+    # client_service.confirm_payment("piotrnowak@example.com")
 
     # client_service.notify_payment_due_in_days()
 

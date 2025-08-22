@@ -1,3 +1,5 @@
+from calendar import month
+
 from openpyxl.utils import column_index_from_string, get_column_letter
 from openpyxl.styles import PatternFill, Font, Border, Alignment
 from src.excel.manager.base_manager import ExcelManager
@@ -142,7 +144,7 @@ class ClientExcelManager(ExcelManager):
                 return True
         return False
 
-    def shift_payment_date(self, col_value: int, value: str, payment_date_col: int, days: int = 30) -> bool:
+    def shift_payment_date(self, col_value: int, value: str, payment_date_col: int, days: int = 360) -> bool:
         """Shift a client's payment date by a given number of days.
 
         Args:

@@ -44,6 +44,24 @@ class ClientService:
         if self.check_if_client_exists(client.email):
             raise ValueError(f"Client with email {client.email} already exists")
         self.client_excel_manager.insert_main_row(client.to_dict())
+        clients = self.client_excel_manager.load_client_row()
+        for c in clients:
+
+            self.email_service.send_email(
+                recipient_email=c["email"],
+                subject=f"New insurance policy",
+                html=f"""
+                                <html>
+                                    <body>
+                                        <p>Hello {c["name"]} <p>Thank you for buying a new insurance policy for
+                                         your car {c["car_model"]} it will be valid until 
+                                         <b>{c["next_payment"]}</b>.</p>
+                                    </body>
+                                </html>
+                                """
+            )
+            print(f"Email with reminder send to {c['email']}")
+
 
     def update_client(self, email: str, update_client: Client) -> None:
         """Update an existing client's data.
@@ -61,7 +79,7 @@ class ClientService:
         if not self.client_excel_manager.update_client_row(2, email, update_client.to_dict()):
             raise ValueError(f"Client with email {email} not found")
 
-    def confirm_payment(self, email: str, days: int = 30) -> None:
+    def confirm_payment(self, email: str, days: int = 360) -> None:
         """Confirm payment by shifting the next payment date.
 
         Args:
