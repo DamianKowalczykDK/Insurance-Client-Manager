@@ -24,7 +24,7 @@ poetry run python .\main_scheduler.py
 ```
 1. **Clone the repo**
 ```bash
-git clone https://github.com/DamianKowalczykDK/Insurance-Cient-Manager
+git clone https://github.com/DamianKowalczykDK/Insurance-Client-Manager
 cd insurance-client-manager
 ```
 2. **Create a virtual environment & install dependencies** 
