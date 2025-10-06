@@ -15,6 +15,7 @@ pandas = "*"
 sqlalchemy = "^2.0.42"
 httpx = "^0.28.1"
 python-dotenv = "^1.1.1"
+freezegun = "^1.5.5"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "*"

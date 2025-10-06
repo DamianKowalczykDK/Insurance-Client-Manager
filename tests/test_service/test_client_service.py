@@ -3,6 +3,7 @@ from src.service.client_service import ClientService
 from unittest.mock import MagicMock, patch
 from datetime import datetime, timedelta
 from src.model.client import Client
+from freezegun import freeze_time
 import pytest
 
 
@@ -163,6 +164,7 @@ def test_notify_payment_due_in_days_except(
 
     assert not mock_email_service.send_email.called
 
+@freeze_time("2025-08-15")
 def test_generate_monthly_report(example_client_service: ClientService, client_1: Client) -> None:
     data = {
         "month": "2025-08",
@@ -188,8 +190,29 @@ def test_generate_monthly_report_except(
     with patch.object(ClientExcelManager, "load_client_row", return_value=[bad_client]):
         report = example_client_service.generate_monthly_report()
 
-
         assert "bad@example.com" not in report
+
+
+# def test_current_month_filter(monkeypatch, example_client_service):
+#     current_month = datetime.today().strftime("%Y-%m")
+#
+#     clients = [
+#         {"insurance_company": "TEST", "price": 100, "next_payment": f"{current_month}-15"},
+#         {"insurance_company": "TEST", "price": 200, "next_payment": "2025-01-04"}
+#     ]
+#
+#     monkeypatch.setattr(
+#         example_client_service.client_excel_manager,
+#         "load_client_row",
+#         lambda: clients
+#     )
+#
+#     example_client_service.client_excel_manager.ratio = 1
+#
+#     report = example_client_service.generate_monthly_report()
+#
+#     assert report["company"]["TEST"] == 1
+#     assert report["gross_total"] == 100
 
 
 

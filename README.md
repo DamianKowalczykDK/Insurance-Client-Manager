@@ -84,5 +84,12 @@ scheduler.start()
 - Overdue Payment: Light red background
 - Styles can be customized via CellStyle dictionaries in config.py.
 
-10. **License**
+10. **Tests & Coverage**
+
+- coverage 100% ✅
+- poetry run pytest --cov=src --cov-report=html
+- View HTML coverage report online:
+https://damiankowalczykdk.github.io/Insurance-Client-Manager/htmlcov/index.html
+
+11. **License**
 - License © 2025 Damian Kowalczyk
