@@ -89,7 +89,7 @@ scheduler.start()
 - coverage 100% ✅
 - poetry run pytest --cov=src --cov-report=html
 - View HTML coverage report online:
-https://damiankowalczykdk.github.io/Insurance-Client-Manager/htmlcov/index.html
+https://damiankowalczykdk.github.io/Insurance-Client-Manager/docs/index.html
 
 11. **License**
 - License © 2025 Damian Kowalczyk
